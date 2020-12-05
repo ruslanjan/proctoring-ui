@@ -11,7 +11,7 @@
         </div>
       </template>
       <template #footer>
-        <Button :disabled="loading" @click="tryLogin" icon="pi pi-sign-in" label="Save" style="width: 100%"/>
+        <Button :disabled="loading" @click="tryLogin" icon="pi pi-sign-in" label="Войти" style="width: 100%"/>
       </template>
     </Card>
   </div>

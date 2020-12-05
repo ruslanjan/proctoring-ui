@@ -1,6 +1,6 @@
 <template>
   <div v-if="!joined && !!user" class="p-justify-center p-align-center p-d-flex" style="flex-grow: 1">
-    <Button class="p-button-lg" v-if="loggedIn" @click="init">Начать пиздец</Button>
+    <Button class="p-button-lg" v-if="loggedIn" @click="init">Присоеденится</Button>
   </div>
   <div v-if="!!user && joined" class="p-m-4">
     <div>
