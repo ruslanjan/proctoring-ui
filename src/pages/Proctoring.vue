@@ -225,7 +225,7 @@ export default {
 
     async refresh() {
       try {
-        let res = await ajax.get(`http://localhost:4000/api/users/room/${this.user.room}`);
+        let res = await ajax.get(`users/room/${this.user.room}`);
         this.room.users_in_room = res.data.data;
       } catch (e) {
         this.$toast.add({severity: 'error', summary: 'Не удалось загрузить пользователей', life: 3000});
