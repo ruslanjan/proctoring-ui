@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:12
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+    ports:
+      - 5432:5432
+  api:
+    build: ./proctor
+    env_file:
+      - .env
+    volumes:
+      - /var/www/tau.moe/media:/code/media # media files
+      - /var/www/tau.moe/production_static:/code/production_static # media files
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+  ui:
+    build: ./proctor-ui
+    ports:
+      - "8080:8080"
+    depends_on:
+      - api
+
+volumes:
+  db-data:
