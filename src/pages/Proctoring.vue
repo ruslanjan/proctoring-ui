@@ -44,7 +44,7 @@
 
 <script>
 import { Socket } from "phoenix"
-import ajax, { api_host, websocket_url } from "@/api/ajax";
+import ajax, { websocket_url } from "@/api/ajax";
 
 const servers = {
   "iceServers": [{
