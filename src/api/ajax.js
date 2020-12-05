@@ -11,8 +11,8 @@ export const api_url = (process.env.NODE_ENV === 'development')
   : `https://${api_host}/api`
 
 export const websocket_url = (process.env.NODE_ENV === 'development')
-  ? `ws://${api_host}/api`
-  : `wss://${api_host}/api`
+  ? `ws://${api_host}/socket`
+  : `wss://${api_host}/socket`
 
 const ajax = axios.create({
   // baseURL: (process.env.APP_BASE_URL !== undefined)
