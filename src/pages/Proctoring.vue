@@ -252,7 +252,7 @@ export default {
         this.$refs["localVideo"].srcObject = this.localStream;
         this.$refs["localDisplayVideo"].srcObject = this.localDisplayStream;
       }
-      this.socket = new Socket(`${websocket_url}/socket`, {params: {token: this.token}})
+      this.socket = new Socket(`${websocket_url}`, {params: {token: this.token}})
       this.socket.connect()
       this.channel = this.socket.channel(`proctor:${this.user.room}`, {})
       this.channel.join()
