@@ -54,10 +54,11 @@ import ajax, { websocket_url } from "@/api/ajax";
 
 const servers = {
   "iceServers": [{
-    urls: 'turn:proc.tau.moe:3478?transport=tcp',
+    urls: 'turn:proc.tau.moe:3478',
     credential: 'password1',
     username: 'username1',
-  }]
+  }],
+  iceTransportPolicy: 'all'
 };
 
 export default {

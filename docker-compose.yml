@@ -12,20 +12,17 @@ services:
     ports:
       - 5432:5432
   api:
-    build: ./proctor
+    build: ./proctoring
     env_file:
       - .env
-    volumes:
-      - /var/www/tau.moe/media:/code/media # media files
-      - /var/www/tau.moe/production_static:/code/production_static # media files
     ports:
-      - "5000:5000"
+      - 5000:5000
     depends_on:
       - db
   ui:
-    build: ./proctor-ui
+    build: ./proctoring-ui
     ports:
-      - "8080:8080"
+      - 8080:8080
     depends_on:
       - api
 
