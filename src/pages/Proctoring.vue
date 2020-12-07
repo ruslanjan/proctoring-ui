@@ -54,7 +54,9 @@ import ajax, { websocket_url } from "@/api/ajax";
 
 const servers = {
   "iceServers": [{
-    'urls': 'stun:stun.l.google.com:19302'
+    urls: 'turn:proc.tau.moe:3478',
+    credential: 'password1',
+    username: 'username1',
   }]
 };
 
