@@ -12,6 +12,11 @@ export default {
     loggedIn() {
       return this.$store.getters['loggedIn']
     },
+  },
+  mounted() {
+    if (!this.loggedIn) {
+      this.$router.push("/login");
+    }
   }
 }
 </script>
