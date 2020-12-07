@@ -1,6 +1,12 @@
 <template>
-  <div v-if="!joined && !!user" class="p-justify-center p-align-center p-d-flex" style="flex-grow: 1">
+  <div v-if="!joined && !!user" class="p-justify-center p-align-center p-d-flex" style="flex-grow: 1; gap: 0.75em">
     <Button class="p-button-lg" v-if="loggedIn" @click="init">Присоеденится</Button>
+    <div v-if="user.is_admin">
+        <span class="p-float-label">
+          <InputText id="room" v-model="roomId"/>
+          <label for="room">Команта</label>
+        </span>
+    </div>
   </div>
   <div v-if="!!user && joined" class="p-m-4">
     <div>
@@ -31,7 +37,7 @@
             <video height="260" :ref="`remoteDisplayVideo_${user.id}`" playsinline autoplay></video>
           </template>
           <template #title>
-            {{user.name}}
+            {{ user.name }}
           </template>
           <template #content>
 
@@ -68,6 +74,7 @@ export default {
   data() {
     return {
       peers: {},
+      roomId: 0,
       room: {
         proctors: {},
         users: {},
@@ -105,7 +112,7 @@ export default {
       });
       peerConnection.addEventListener('connectionstatechange', () => {
         console.log(`Peer connection with user ${receiver.username} changed to: ${peerConnection.connectionState}`)
-        switch(peerConnection.connectionState) {
+        switch (peerConnection.connectionState) {
           case "new":
           case "connected":
             console.log('peers connected')
@@ -135,8 +142,8 @@ export default {
           console.log('got track')
           remoteStreams[0].addTrack(event.track, remoteStreams[0]);
           remoteStreams = [
-              remoteStreams[1],
-              remoteStreams[0],
+            remoteStreams[1],
+            remoteStreams[0],
           ]
           console.log(event.streams)
         });
@@ -225,7 +232,7 @@ export default {
 
     async refresh() {
       try {
-        let res = await ajax.get(`users/room/${this.user.room}`);
+        let res = await ajax.get(`users/room/${this.user.is_proctor ? this.roomId : this.user.room}`);
         this.room.users_in_room = res.data.data;
       } catch (e) {
         this.$toast.add({severity: 'error', summary: 'Не удалось загрузить пользователей', life: 3000});
@@ -247,17 +254,21 @@ export default {
           return await navigator.mediaDevices.getDisplayMedia(constraints);
         }
 
-        this.localStream = await openMediaDevices({'video':true,'audio':false});
-        this.localDisplayStream = await openDisplayDevices({'video':true,'audio':false})
+        this.localStream = await openMediaDevices({'video': true, 'audio': false});
+        this.localDisplayStream = await openDisplayDevices({'video': true, 'audio': false})
         this.$refs["localVideo"].srcObject = this.localStream;
         this.$refs["localDisplayVideo"].srcObject = this.localDisplayStream;
       }
       this.socket = new Socket(`${websocket_url}`, {params: {token: this.token}})
       this.socket.connect()
-      this.channel = this.socket.channel(`proctor:${this.user.room}`, {})
+      this.channel = this.socket.channel(`proctor:${this.user.is_proctor ? this.roomId : this.user.room}`, {})
       this.channel.join()
-          .receive("ok", resp => { console.log("Joined successfully", resp) })
-          .receive("error", resp => { console.log("Unable to join", resp) })
+          .receive("ok", resp => {
+            console.log("Joined successfully", resp)
+          })
+          .receive("error", resp => {
+            console.log("Unable to join", resp)
+          })
 
       this.channel.on("proctor_joined", async payload => {
         console.log("proctor_joined", payload.body.user)
