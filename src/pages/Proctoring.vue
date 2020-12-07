@@ -232,7 +232,7 @@ export default {
 
     async refresh() {
       try {
-        let res = await ajax.get(`users/room/${this.user.is_proctor ? this.roomId : this.user.room}`);
+        let res = await ajax.get(`users/room/${this.user.is_admin ? this.roomId : this.user.room}`);
         this.room.users_in_room = res.data.data;
       } catch (e) {
         this.$toast.add({severity: 'error', summary: 'Не удалось загрузить пользователей', life: 3000});
@@ -261,7 +261,7 @@ export default {
       }
       this.socket = new Socket(`${websocket_url}`, {params: {token: this.token}})
       this.socket.connect()
-      this.channel = this.socket.channel(`proctor:${this.user.is_proctor ? this.roomId : this.user.room}`, {})
+      this.channel = this.socket.channel(`proctor:${this.user.is_admin ? this.roomId : this.user.room}`, {})
       this.channel.join()
           .receive("ok", resp => {
             console.log("Joined successfully", resp)
