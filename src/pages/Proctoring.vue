@@ -197,10 +197,10 @@ export default {
     },
 
     async sendOffer(receiver) {
-      console.log("send offer", receiver)
       let peerConnection = this.peers[receiver.id];
       const offer = await peerConnection.createOffer();
       await peerConnection.setLocalDescription(offer);
+      console.log("send offer", receiver, offer)
       this.channel.push("offerRTC", {
         body: {
           "offer": offer,
