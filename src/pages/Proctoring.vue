@@ -200,7 +200,13 @@ export default {
       let peerConnection = this.peers[receiver.id];
       const offer = await peerConnection.createOffer();
       await peerConnection.setLocalDescription(offer);
-      console.log("send offer", receiver, offer)
+      console.log("send offer", {
+        body: {
+          "offer": offer,
+          receiver: receiver,
+          from: this.user
+        }
+      })
       this.channel.push("offerRTC", {
         body: {
           "offer": offer,
