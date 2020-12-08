@@ -63,14 +63,14 @@ const openDisplayDevices = async (constraints) => {
 
 const servers = {
   "iceServers": [
-    // {
-    //   urls: 'turn:proctor.iitu.kz:3478',
-    //   credential: 'somepassword',
-    //   username: 'guest',
-    // }, {
-    //   urls: 'stun:proctor.iitu.kz:3478',
-    // }
-    {'urls': 'stun:stun.l.google.com:19302'}
+    {
+      urls: 'turn:proctor.iitu.kz:3478',
+      credential: 'somepassword',
+      username: 'guest',
+    }, {
+      urls: 'stun:proctor.iitu.kz:3478',
+    }
+    // {'urls': 'stun:stun.l.google.com:19302'}
   ],
   iceTransportPolicy: 'all'
 };
