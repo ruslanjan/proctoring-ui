@@ -29,7 +29,7 @@
     <video height="260" ref="localVideo" v-if="!user.is_proctor" autoplay></video>
     <video height="260" ref="localDisplayVideo" v-if="!user.is_proctor" autoplay></video>
     <video height="260" ref="remoteProctor" v-if="!user.is_proctor" autoplay></video>
-<!--    <audio ref="remoteAudio" autoplay v-if="!user.is_proctor"></audio>-->
+    <!--    <audio ref="remoteAudio" autoplay v-if="!user.is_proctor"></audio>-->
     <div v-if="user.is_proctor">
       <h2>Пользователи:</h2>
       <div class="p-d-flex p-flex-wrap" style="gap: 0.75rem">
@@ -62,13 +62,15 @@ const openDisplayDevices = async (constraints) => {
 }
 
 const servers = {
-  "iceServers": [{
-    urls: 'turn:proctor.iitu.kz:3478',
-    credential: 'somepassword',
-    username: 'guest',
-  }, {
-    urls: 'stun:proctor.iitu.kz:3478',
-  }
+  "iceServers": [
+    // {
+    //   urls: 'turn:proctor.iitu.kz:3478',
+    //   credential: 'somepassword',
+    //   username: 'guest',
+    // }, {
+    //   urls: 'stun:proctor.iitu.kz:3478',
+    // }
+    {'urls': 'stun:stun.l.google.com:19302'}
   ],
   iceTransportPolicy: 'all'
 };
