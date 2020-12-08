@@ -361,6 +361,7 @@ export default {
       });
 
       this.channel.on("proctor_here", async payload => {
+        console.log("proctor_here", payload)
         this.room.proctors[payload.body.user.id] = payload.body.user;
         if (!this.user.is_proctor) {
           if (!this.peers[payload.body.user.id]) {
