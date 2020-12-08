@@ -171,17 +171,14 @@ export default {
         // };
         // peerConnection.createDataChannel("dummy");
       } else {
-        let remoteStream = new MediaStream();
-        this.$refs[`remoteProctor`].srcObject = remoteStream;
-        peerConnection.addEventListener('track', async (event) => {
-          console.log('got track')
-          remoteStream.addTrack(event.track, remoteStream);
-          console.log(event.streams);
-        });
+        // let remoteStream = new MediaStream();
+        // this.$refs[`remoteProctor`].srcObject = remoteStream;
+        // peerConnection.addEventListener('track', async (event) => {
+        //   console.log('got track')
+        //   remoteStream.addTrack(event.track, remoteStream);
+        //   console.log(event.streams);
+        // });
       }
-      this.localStream.getTracks().forEach(track => {
-        peerConnection.addTrack(track, this.localStream);
-      });
       this.peers[receiver.id] = peerConnection;
       console.log("Added localStream to localPeerConnection");
       return peerConnection
@@ -189,6 +186,9 @@ export default {
 
     async createUserPeerConnection(receiver) {
       let peerConnection = this.createProctorPeerConnection(receiver);
+      this.localStream.getTracks().forEach(track => {
+        peerConnection.addTrack(track, this.localStream);
+      });
       this.localDisplayStream.getTracks().forEach(track => {
         peerConnection.addTrack(track, this.localDisplayStream);
       });
@@ -278,7 +278,7 @@ export default {
         this.$refs["localVideo"].srcObject = this.localStream;
         this.$refs["localDisplayVideo"].srcObject = this.localDisplayStream;
       } else {
-        this.localStream = await openMediaDevices({'video': true, 'audio': true});
+        // this.localStream = await openMediaDevices({'video': true, 'audio': true});
       }
       this.socket = new Socket(`${websocket_url}`, {params: {token: this.token}})
       this.socket.connect()
