@@ -67,7 +67,7 @@ const servers = {
     credential: 'somepassword',
     username: 'guest',
   }],
-  iceTransportPolicy: 'all'
+  iceTransportPolicy: 'relay'
 };
 
 export default {
