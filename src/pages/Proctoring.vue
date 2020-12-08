@@ -63,7 +63,7 @@ const openDisplayDevices = async (constraints) => {
 
 const servers = {
   "iceServers": [{
-    urls: 'turn:proctor.iitu.kz',
+    urls: 'turn:proctor.iitu.kz:3478',
     credential: 'somepassword',
     username: 'guest',
   }],
