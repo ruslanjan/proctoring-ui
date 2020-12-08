@@ -197,6 +197,7 @@ export default {
     },
 
     async sendOffer(receiver) {
+      console.log("send offer", receiver)
       let peerConnection = this.peers[receiver.id];
       const offer = await peerConnection.createOffer();
       await peerConnection.setLocalDescription(offer);
