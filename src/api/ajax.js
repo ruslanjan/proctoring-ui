@@ -4,7 +4,7 @@ import router from '@/router';
 
 export const api_host = (process.env.NODE_ENV === 'development')
   ? 'localhost:4000'
-  : 'proc.tau.moe';
+  : 'proctor.iitu.kz';
 
 export const api_url = (process.env.NODE_ENV === 'development')
   ? `http://${api_host}/api`
