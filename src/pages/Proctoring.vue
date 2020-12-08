@@ -70,7 +70,7 @@ const servers = {
     urls: 'stun:proctor.iitu.kz:3478',
   }
   ],
-  iceTransportPolicy: 'relay'
+  iceTransportPolicy: 'all'
 };
 
 export default {
