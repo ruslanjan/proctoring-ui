@@ -28,6 +28,8 @@
 
     <video height="260" ref="localVideo" v-if="!user.is_proctor" autoplay></video>
     <video height="260" ref="localDisplayVideo" v-if="!user.is_proctor" autoplay></video>
+    <video height="260" ref="remoteProctor" v-if="!user.is_proctor" autoplay></video>
+<!--    <audio ref="remoteAudio" autoplay v-if="!user.is_proctor"></audio>-->
     <div v-if="user.is_proctor">
       <h2>Пользователи:</h2>
       <div class="p-d-flex p-flex-wrap" style="gap: 0.75rem">
@@ -52,11 +54,18 @@
 import { Socket } from "phoenix"
 import ajax, { websocket_url } from "@/api/ajax";
 
+const openMediaDevices = async (constraints) => {
+  return await navigator.mediaDevices.getUserMedia(constraints);
+}
+const openDisplayDevices = async (constraints) => {
+  return await navigator.mediaDevices.getDisplayMedia(constraints);
+}
+
 const servers = {
   "iceServers": [{
-    urls: 'turn:proc.tau.moe:3478',
-    credential: 'password1',
-    username: 'username1',
+    urls: 'turn:proctor.iitu.kz',
+    credential: 'somepassword',
+    username: 'guest',
   }],
   iceTransportPolicy: 'all'
 };
@@ -156,7 +165,18 @@ export default {
         //   console.log("Received remote stream");
         // };
         // peerConnection.createDataChannel("dummy");
+      } else {
+        let remoteStream = new MediaStream();
+        this.$refs[`remoteProctor`].srcObject = remoteStream;
+        peerConnection.addEventListener('track', async (event) => {
+          console.log('got track')
+          remoteStream.addTrack(event.track, remoteStream);
+          console.log(event.streams);
+        });
       }
+      this.localStream.getTracks().forEach(track => {
+        peerConnection.addTrack(track, this.localStream);
+      });
       this.peers[receiver.id] = peerConnection;
       console.log("Added localStream to localPeerConnection");
       return peerConnection
@@ -164,9 +184,6 @@ export default {
 
     async createUserPeerConnection(receiver) {
       let peerConnection = this.createProctorPeerConnection(receiver);
-      this.localStream.getTracks().forEach(track => {
-        peerConnection.addTrack(track, this.localStream);
-      });
       this.localDisplayStream.getTracks().forEach(track => {
         peerConnection.addTrack(track, this.localDisplayStream);
       });
@@ -250,17 +267,13 @@ export default {
       await this.refresh();
       this.joined = true;
       if (!this.user.is_proctor) {
-        const openMediaDevices = async (constraints) => {
-          return await navigator.mediaDevices.getUserMedia(constraints);
-        }
-        const openDisplayDevices = async (constraints) => {
-          return await navigator.mediaDevices.getDisplayMedia(constraints);
-        }
 
         this.localStream = await openMediaDevices({'video': true, 'audio': false});
         this.localDisplayStream = await openDisplayDevices({'video': true, 'audio': false})
         this.$refs["localVideo"].srcObject = this.localStream;
         this.$refs["localDisplayVideo"].srcObject = this.localDisplayStream;
+      } else {
+        this.localStream = await openMediaDevices({'video': true, 'audio': true});
       }
       this.socket = new Socket(`${websocket_url}`, {params: {token: this.token}})
       this.socket.connect()
