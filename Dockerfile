@@ -1,24 +1,11 @@
-FROM node:lts-alpine
-
-RUN apk add --no-cache git
-
-# устанавливаем простой HTTP-сервер для статики
-RUN npm install -g http-server
-
-# делаем каталог 'app' текущим рабочим каталогом
+FROM node:latest as build-stage
 WORKDIR /app
-
-# копируем оба 'package.json' и 'package-lock.json' (если есть)
 COPY package*.json ./
-
-# устанавливаем зависимости проекта
 RUN npm install
-
-# копируем файлы и каталоги проекта в текущий рабочий каталог (т.е. в каталог 'app')
-COPY . .
-
-# собираем приложение для production с минификацией
+COPY ./ .
 RUN npm run build
 
-EXPOSE 8080
-CMD [ "http-server", "dist" ]
+FROM nginx as production-stage
+RUN mkdir /app
+COPY --from=build-stage /app/dist /app
+COPY nginx.conf /etc/nginx/nginx.conf

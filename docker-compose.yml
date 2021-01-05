@@ -12,7 +12,11 @@ services:
     ports:
       - 5432:5432
   api:
-    build: ./proctoring
+    build:
+      context: ./proctoring
+      args:
+        DATABASE_URL: postgres://postgres:postgres@db:5432/proctoring
+        SECRET_KEY_BASE: SECRET_KEY_BASE # must be replaced
     env_file:
       - .env
     ports:
@@ -22,7 +26,7 @@ services:
   ui:
     build: ./proctoring-ui
     ports:
-      - 8080:8080
+      - 8080:80
     depends_on:
       - api
 

@@ -1,6 +1,15 @@
 import axios from 'axios';
 import store from '@/store';
 import router from '@/router';
+import { app } from '@/main';
+
+export const ui_host = (process.env.NODE_ENV === 'development')
+  ? 'localhost:8080'
+  : 'proctor.iitu.kz';
+
+export const ui_url = (process.env.NODE_ENV === 'development')
+  ? 'http://' + ui_host
+  : 'https://' + ui_host;
 
 export const api_host = (process.env.NODE_ENV === 'development')
   ? 'localhost:4000'
@@ -32,7 +41,7 @@ ajax.interceptors.request.use(
     let token = store.getters['token']
 
     if (token) {
-      config.headers['Authorization'] = `Bearer ${ token }`;
+      config.headers['Authorization'] = `Bearer ${token}`;
     }
 
     if (localStorage.language) {
@@ -72,9 +81,10 @@ ajax.interceptors.response.use(
   error => {
     console.log(error.response)
     const {status} = error.response;
+    app.$toast.add({severity: 'error', summary: 'Время сессии истекло', life: 3000});
     if (status === UNAUTHORIZED) {
       store.dispatch('logout');
-      router.push("/login")
+      router.push("/login");
     }
     return Promise.reject(error);
   }

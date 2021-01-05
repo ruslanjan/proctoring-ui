@@ -29,12 +29,14 @@ app.use(router)
 app.use(ToastService);
 
 const primeComponents = {
-    Dialog, Button, MegaMenu, Menubar, InputText, Card, Toast, Checkbox, DataTable, Column
+  Dialog, Button, MegaMenu, Menubar, InputText, Card, Toast, Checkbox, DataTable, Column
 }
 Object.keys(primeComponents).forEach(key => {
-    app.component(key, primeComponents[key]);
+  app.component(key, primeComponents[key]);
 })
 
 app.config.globalProperties.$primevue = {ripple: true};
 
 app.mount('#app')
+
+export { app }
