@@ -380,13 +380,13 @@ export default {
       this.room.users[user.id].muted = true;
       // this.room.tracks[user.id][0].enabled = false;
       console.log(this.room.users[user.id].tracks[2]);
-      this.room.users[user.id].tracks[2].enabled = false;
+      this.room.users[user.id].tracks[2].enabled = !this.room.users[user.id].tracks[2].enabled;
     },
 
     unmuteUser(user) {
       this.room.users[user.id].muted = false;
       // this.room.tracks[user.id][0].enabled = true;
-      this.room.users[user.id].tracks[2].enabled = true;
+      this.room.users[user.id].tracks[2].enabled = !this.room.users[user.id].tracks[2].enabled;
     },
     // --- Only UI ----
 
@@ -441,7 +441,7 @@ export default {
         this.$refs[`remoteVideo_${receiver.id}`].srcObject = remoteStreams[0];
         this.$refs[`remoteDisplayVideo_${receiver.id}`].srcObject = remoteStreams[1];
         this.$refs[`remoteAudio_${receiver.id}`].srcObject = remoteStreams[2];
-        this.room.users[receiver.id].tracks = [null, null];
+        this.room.users[receiver.id].tracks = [null, null, null];
         peerConnection.addEventListener('track', async (event) => {
           console.log('got track', event.track, "streams", event.streams)
           if (event.track.kind === "audio") {
