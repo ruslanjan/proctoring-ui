@@ -21,6 +21,7 @@
     <h3 style="margin: 0">Allow Screen access</h3>
   </Message>
   <div v-if="!!user && joined" class="p-m-4">
+    <Button @click="playNotification" label="Check notification sound"/>
     <div>
       <h2>Proctors:</h2>
       <div class="p-d-flex p-px-4 p-pb-3" style="gap: 0.75em; flex-wrap: wrap">
@@ -164,7 +165,7 @@
     <video height="260" ref="remoteProctor" v-if="!user.is_proctor" autoplay></video>
     <!--    <audio ref="remoteAudio" autoplay v-if="!user.is_proctor"></audio>-->
 
-<!--    <audio ref="notifyAudio"><source src="/piece-of-cake-611.mp3" type="audio/mpeg"></audio>-->
+    <audio ref="notifyAudio"><source src="/piece-of-cake-611.mp3" type="audio/mpeg"></audio>
     <div v-if="user.is_proctor">
       <h2>Users streams:</h2>
       <div class="users-streams">
@@ -372,6 +373,9 @@ export default {
   },
   methods: {
     // Only UI
+    playNotification() {
+      this.$refs['notifyAudio'].play();
+    },
     fromNow(date) {
       return moment(date).fromNow();
     },
@@ -645,6 +649,7 @@ export default {
       if (!this.user.is_proctor) {
         this.chat.on("new_message", async message => {
           this.chat.user.push(message);
+          this.playNotification();
           setTimeout(() => {
             let container = this.$refs['userChat']
             container.scrollTop = container.scrollHeight;
@@ -654,6 +659,7 @@ export default {
         this.chat.on("new_message", async (message) => {
           if (message.is_system) {
             this.chat.system.push(message);
+            this.playNotification();
             setTimeout(() => {
               let container = this.$refs['systemChat']
               container.scrollTop = container.scrollHeight;
@@ -661,6 +667,7 @@ export default {
           } else {
             if (message.to_user && this.room.users[message.to_user.id]) {
               this.room.users[message.to_user.id].chat.push(message);
+              this.playNotification();
               if (message.from !== 'Proctor' && message.from !== 'System') {
                 this.room.users[message.to_user.id].unanswered = true;
               }
