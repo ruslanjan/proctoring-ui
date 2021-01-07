@@ -86,7 +86,7 @@ ajax.interceptors.response.use(
       router.push("/login");
     }
     try {
-      app.toast.add({severity: 'error', summary: 'Время сессии истекло', life: 3000});
+      app.toast.add({severity: 'error', summary: 'Session life expired', life: 3000});
     } catch (e) {
       console.log(e);
     }

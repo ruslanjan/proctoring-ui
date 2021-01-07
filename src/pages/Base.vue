@@ -19,7 +19,7 @@
       </template>
     </Menubar>
     <router-view></router-view>
-    <div class="p-d-flex" style="justify-content: center; padding: 20px">
+    <div class="p-d-flex" style="justify-content: center; padding: 20px; margin-bottom: 40px;">
       <div style="text-align: center">
         Made by <strong>Ruslan Jankurazov 2021</strong><br/>
         ruslanjan888@gmail.com

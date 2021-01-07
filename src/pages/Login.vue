@@ -42,13 +42,13 @@ export default {
           'password': this.password,
         })
         if (res.status === 200) {
-          this.$toast.add({severity:'success', summary: 'Вы вошли', life: 3000});
+          this.$toast.add({severity:'success', summary: 'You have logged in', life: 3000});
         }
         this.login(res.data);
         this.$router.push('/');
       } catch (e) {
         if (e.response.status === 422) {
-          this.$toast.add({severity:'error', summary: 'Не верные учетные данные', life: 3000});
+          this.$toast.add({severity:'error', summary: 'Invalid credentials', life: 3000});
         }
         console.log(e);
       }
