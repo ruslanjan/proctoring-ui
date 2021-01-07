@@ -26,7 +26,10 @@
       <h2>Proctors:</h2>
       <div class="p-d-flex p-px-4 p-pb-3" style="gap: 0.75em; flex-wrap: wrap">
         <div v-for="user in room.users_in_room.filter((user) => user.is_proctor)" :key="user.id">
-          <span :class="`p-tag ${room.proctors[user.id] || !current_user.is_proctor?'p-tag-danger-info':'p-tag-danger'}`">{{ user.name }}</span>
+          <span
+              :class="`p-tag ${room.proctors[user.id] || !current_user.is_proctor?'p-tag-danger-info':'p-tag-danger'}`">{{
+              user.name
+            }}</span>
         </div>
       </div>
     </div>
@@ -47,7 +50,7 @@
           <div class="messages-container">
             <div class="messages-scroller" ref="systemChat">
               <template v-for="message in chat.system" :key="message.id">
-                <div >
+                <div>
                   <div class="p-inline-message p-component" v-if="!message.is_system">
                     <div class="p-inline-message-icon pi pi-user"></div>
                     <!--            pi-exclamation-triangle-->
@@ -80,11 +83,11 @@
                           <strong>{{ message.from }}</strong>
                         </div>
                         <div style="white-space: normal; word-break: break-all">
-                          {{message.message}}
+                          {{ message.message }}
                         </div>
                       </div>
                       <div style="padding-left: 1em; white-space: nowrap">
-                        {{fromNow(message.inserted_at)}}
+                        {{ fromNow(message.inserted_at) }}
                       </div>
                     </div>
                   </InlineMessage>
@@ -105,13 +108,13 @@
       <Card>
         <template #title>
           Chat
-<!--      User Side chat-->
+          <!--      User Side chat-->
         </template>
         <template #content>
           <div class="messages-container">
             <div class="messages-scroller" ref="userChat">
               <template v-for="message in chat.user" :key="message.id">
-                <div >
+                <div>
                   <div class="p-inline-message p-component" v-if="!message.is_system">
                     <div class="p-inline-message-icon pi pi-user"></div>
                     <!--            pi-exclamation-triangle-->
@@ -122,11 +125,11 @@
                             <strong>{{ message.from }}</strong>
                           </div>
                           <div style="white-space: normal; word-break: break-all">
-                            {{message.message}}
+                            {{ message.message }}
                           </div>
                         </div>
                         <div style="padding-left: 1em; white-space: nowrap">
-                          {{fromNow(message.inserted_at)}}
+                          {{ fromNow(message.inserted_at) }}
                         </div>
                       </div>
                     </div>
@@ -138,11 +141,11 @@
                           <strong>{{ message.from }}</strong>
                         </div>
                         <div style="white-space: normal; word-break: break-all">
-                          {{message.message}}
+                          {{ message.message }}
                         </div>
                       </div>
                       <div style="padding-left: 1em; white-space: nowrap">
-                        {{fromNow(message.inserted_at)}}
+                        {{ fromNow(message.inserted_at) }}
                       </div>
                     </div>
                   </InlineMessage>
@@ -165,10 +168,21 @@
     <video height="260" ref="remoteProctor" v-if="!user.is_proctor" autoplay></video>
     <!--    <audio ref="remoteAudio" autoplay v-if="!user.is_proctor"></audio>-->
 
-    <audio ref="notifyAudio"><source src="/piece-of-cake-611.mp3" type="audio/mpeg"></audio>
-    <div v-if="user.is_proctor">
-      <h2>Users streams:</h2>
-      <div class="users-streams">
+    <audio ref="notifyAudio">
+      <source src="/piece-of-cake-611.mp3" type="audio/mpeg">
+    </audio>
+    <div v-if="user.is_proctor" class="p-mt-3">
+      <div class="p-d-flex" style="justify-content: space-between">
+        <h2>Users streams:</h2>
+      </div>
+      <div style="position: fixed; bottom: 0; right: 0">
+        <span class="p-float-label" style="margin: 16px">
+        <InputNumber id="columns" buttonLayout="horizontal" showButtons
+                     v-model="columns"/>
+        <label for="columns">Columns</label>
+      </span>
+      </div>
+      <div class="users-streams" :style="`grid-template-columns: repeat(${columns}, 1fr);`">
         <Card v-for="user in room.users" :key="user.id">
           <template #header>
             <div>
@@ -195,9 +209,10 @@
               </template>
               <template #content>
                 <div class="messages-container">
-                  <div class="messages-scroller" :ref="`userChat_${user.id}`" :style="room.users[user.id].unanswered?'background-color: orangered':''">
+                  <div class="messages-scroller" :ref="`userChat_${user.id}`"
+                       :style="room.users[user.id].unanswered?'background-color: orangered':''">
                     <template v-for="message in user.chat" :key="message.id">
-                      <div >
+                      <div>
                         <div class="p-inline-message p-component" v-if="!message.is_system">
                           <div class="p-inline-message-icon pi pi-user"></div>
                           <!--            pi-exclamation-triangle-->
@@ -208,11 +223,11 @@
                                   <strong>{{ message.from }}</strong>
                                 </div>
                                 <div style="white-space: normal; word-break: break-all">
-                                  {{message.message}}
+                                  {{ message.message }}
                                 </div>
                               </div>
                               <div style="padding-left: 1em; white-space: nowrap">
-                                {{fromNow(message.inserted_at)}}
+                                {{ fromNow(message.inserted_at) }}
                               </div>
                             </div>
                           </div>
@@ -224,11 +239,11 @@
                                 <strong>{{ message.from }}</strong>
                               </div>
                               <div style="white-space: normal; word-break: break-all">
-                                {{message.message}}
+                                {{ message.message }}
                               </div>
                             </div>
                             <div style="padding-left: 1em; white-space: nowrap">
-                              {{fromNow(message.inserted_at)}}
+                              {{ fromNow(message.inserted_at) }}
                             </div>
                           </div>
                         </InlineMessage>
@@ -239,7 +254,8 @@
               </template>
               <template #footer>
                 <div class="p-d-flex" style="gap: 1.5em">
-                  <Textarea style="flex-grow: 1" type="text" v-model="sendToUserDraft[user.id]" placeholder="Talk to the hand"/>
+                  <Textarea style="flex-grow: 1" type="text" v-model="sendToUserDraft[user.id]"
+                            placeholder="Talk to the hand"/>
                   <Button icon="pi pi-upload" label="Send" @click="sendToUser(user)"/>
                 </div>
               </template>
@@ -279,7 +295,7 @@
 .users-streams {
   gap: 0.75rem;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /*grid-template-columns: repeat(3, 1fr);*/
 }
 
 .proctor-user-stream {
@@ -366,6 +382,7 @@ export default {
       channel: null,
       joined: false,
       // others
+      columns: 3,
       allowWebcam: false,
       allowDisplay: false
     }
@@ -728,7 +745,7 @@ export default {
             video: {
               cursor: 'always',
               displaySurface: 'monitor'
-              }, 'audio': true
+            }, 'audio': true
           })
           // this.localDisplayAudioStream = await openDisplayDevices({video: false, 'audio': true})
           const checkIsScreen = () => {

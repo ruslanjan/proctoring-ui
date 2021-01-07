@@ -22,6 +22,8 @@ import Column from "primevue/column";
 import Message from 'primevue/message';
 import Textarea from 'primevue/textarea';
 import InlineMessage from 'primevue/inlinemessage';
+import InputNumber from 'primevue/inputnumber';
+
 
 const app = createApp(App);
 
@@ -44,7 +46,8 @@ const primeComponents = {
   Column,
   Message,
   Textarea,
-  InlineMessage
+  InlineMessage,
+  InputNumber,
 }
 Object.keys(primeComponents).forEach(key => {
   app.component(key, primeComponents[key]);
