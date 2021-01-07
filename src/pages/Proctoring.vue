@@ -1,7 +1,7 @@
 <template>
   <div v-if="!joined && !!user" class="p-justify-center p-align-center p-d-flex" style="flex-grow: 1; gap: 0.75em">
     <Button class="p-button-lg" v-if="loggedIn" :disabled="connect_disabled" @click="init">Connect</Button>
-    <div v-if="user.is_admin">
+    <div v-if="user.is_admin || user.is_proctor">
         <span class="p-float-label">
           <InputText id="room" v-model="roomId"/>
           <label for="room">Room</label>
