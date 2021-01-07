@@ -81,10 +81,14 @@ ajax.interceptors.response.use(
   error => {
     console.log(error.response)
     const {status} = error.response;
-    app.$toast.add({severity: 'error', summary: 'Время сессии истекло', life: 3000});
     if (status === UNAUTHORIZED) {
       store.dispatch('logout');
       router.push("/login");
+    }
+    try {
+      app.toast.add({severity: 'error', summary: 'Время сессии истекло', life: 3000});
+    } catch (e) {
+      console.log(e);
     }
     return Promise.reject(error);
   }
