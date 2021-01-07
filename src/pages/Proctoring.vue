@@ -352,7 +352,6 @@ export default {
       room: {
         proctors: {},
         users: {},
-        tracks: {},
         users_in_room: []
       },
       chat: {
@@ -381,16 +380,17 @@ export default {
     },
 
     muteUser(user) {
+      console.log(user)
       this.room.users[user.id].muted = true;
-      // this.room.tracks[user.id][0].enabled = false;
-      console.log(this.room.users[user.id].tracks[2]);
       this.room.users[user.id].tracks[2].enabled = !this.room.users[user.id].tracks[2].enabled;
+      console.log(this.room.users[user.id].tracks[2]);
     },
 
     unmuteUser(user) {
+      console.log(user)
       this.room.users[user.id].muted = false;
-      // this.room.tracks[user.id][0].enabled = true;
       this.room.users[user.id].tracks[2].enabled = !this.room.users[user.id].tracks[2].enabled;
+      console.log(this.room.users[user.id].tracks[2]);
     },
     // --- Only UI ----
 
@@ -461,6 +461,7 @@ export default {
               remoteStreams[2],
             ]
           }
+          console.log("user tracks added", this.room.users[receiver.id])
         });
         // peerConnection.onaddstream = e => {
         //   this.$refs[`remoteVideo_${receiver.id}`].srcObject = e.stream;
@@ -727,7 +728,7 @@ export default {
             video: {
               cursor: 'always',
               displaySurface: 'monitor'
-            }, 'audio': true
+              }, 'audio': true
           })
           // this.localDisplayAudioStream = await openDisplayDevices({video: false, 'audio': true})
           const checkIsScreen = () => {
@@ -846,8 +847,10 @@ export default {
         }
       });
       this.channel.on("user_here", async payload => {
-        this.room.users[payload.body.user.id] = payload.body.user;
-        this.loadUserChat(payload.body.user.id);
+        if (!this.room.users[payload.body.user.id]) {
+          this.room.users[payload.body.user.id] = payload.body.user;
+          this.loadUserChat(payload.body.user.id);
+        }
       });
 
       if (this.user.is_proctor) {

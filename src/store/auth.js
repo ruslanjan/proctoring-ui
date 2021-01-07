@@ -1,8 +1,19 @@
 const loadState = () => {
   try {
+    const serializedTimestamp = localStorage.getItem("auth-timestamp")
+    if (!serializedTimestamp) return undefined;
+    const timestamp = JSON.parse(serializedTimestamp);
+    if ((new Date()).getTime() > timestamp) {
+      return undefined;
+    }
+
     const serializedState = localStorage.getItem("auth");
-    if (!serializedState) return undefined;
-    else return JSON.parse(serializedState);
+
+    if (!serializedState) {
+      return undefined;
+    } else {
+      return JSON.parse(serializedState);
+    }
   } catch (err) {
     return undefined;
   }
@@ -12,6 +23,7 @@ const saveState = (state) => {
   try {
     const serializedState = JSON.stringify(state);
     localStorage.setItem("auth", serializedState);
+    localStorage.setItem("auth-timestamp", JSON.stringify((new Date()).getTime() + 3600000 * 12));
   } catch (err) {
     console.log(err);
   }
