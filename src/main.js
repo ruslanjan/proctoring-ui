@@ -19,6 +19,9 @@ import Toast from "primevue/toast";
 import Checkbox from "primevue/checkbox";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
+import Message from 'primevue/message';
+import Textarea from 'primevue/textarea';
+import InlineMessage from 'primevue/inlinemessage';
 
 const app = createApp(App);
 
@@ -29,7 +32,19 @@ app.use(router)
 app.use(ToastService);
 
 const primeComponents = {
-  Dialog, Button, MegaMenu, Menubar, InputText, Card, Toast, Checkbox, DataTable, Column
+  Dialog,
+  Button,
+  MegaMenu,
+  Menubar,
+  InputText,
+  Card,
+  Toast,
+  Checkbox,
+  DataTable,
+  Column,
+  Message,
+  Textarea,
+  InlineMessage
 }
 Object.keys(primeComponents).forEach(key => {
   app.component(key, primeComponents[key]);

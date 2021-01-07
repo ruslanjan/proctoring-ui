@@ -11,10 +11,10 @@
             {{ auth.user.name }}
           </div>
           <Button v-if="auth.loggedIn" class="p-button-danger p-button-sm" @click="tryLogout">
-            Выйти
+            Logout
           </Button>
         </div>
-        <Button v-if="!auth.loggedIn" class="p-button-info p-button-sm" @click="$router.push({'name': 'Login'})">Войти
+        <Button v-if="!auth.loggedIn" class="p-button-info p-button-sm" @click="$router.push({'name': 'Login'})">Login
         </Button>
       </template>
     </Menubar>

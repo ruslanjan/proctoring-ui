@@ -2,16 +2,16 @@
   <div style="flex-grow: 1; display: flex; justify-content: center; align-items: center">
     <Card>
       <template #title>
-        Войти
+        Login
       </template>
       <template #content>
         <div style="display: flex; flex-direction: column; gap: 8px">
-          <InputText name="username" :disabled="loading" type="text" v-model="username" placeholder="Имя пользователя"/>
-          <InputText name="password" :disabled="loading" type="password" v-model="password" placeholder="Пароль"/>
+          <InputText name="username" :disabled="loading" type="text" v-model="username" placeholder="Username"/>
+          <InputText name="password" :disabled="loading" type="password" v-model="password" placeholder="Password"/>
         </div>
       </template>
       <template #footer>
-        <Button :disabled="loading" @click="tryLogin" icon="pi pi-sign-in" label="Войти" style="width: 100%"/>
+        <Button :disabled="loading" @click="tryLogin" icon="pi pi-sign-in" label="Login" style="width: 100%"/>
       </template>
     </Card>
   </div>

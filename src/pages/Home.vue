@@ -1,6 +1,6 @@
 <template>
   <div class="p-justify-center p-align-center p-d-flex" style="flex-grow: 1">
-    <Button class="p-button-lg" v-if="loggedIn" @click="$router.push({name: 'Proctoring'})">Начать подключение</Button>
+    <Button class="p-button-lg" v-if="loggedIn" @click="$router.push({name: 'Proctoring'})">Initialize connection</Button>
   </div>
 </template>
 
