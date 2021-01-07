@@ -23,15 +23,15 @@
   <div v-if="!!user && joined" class="p-m-4">
     <div>
       <h2>Proctors:</h2>
-      <div class="p-d-flex p-px-4 p-pb-3" style="gap: 0.75em">
+      <div class="p-d-flex p-px-4 p-pb-3" style="gap: 0.75em; flex-wrap: wrap">
         <div v-for="user in room.users_in_room.filter((user) => user.is_proctor)" :key="user.id">
-          <span :class="`p-tag ${room.proctors[user.id]?'p-tag-danger-info':'p-tag-danger'}`">{{ user.name }}</span>
+          <span :class="`p-tag ${room.proctors[user.id] || !current_user.is_proctor?'p-tag-danger-info':'p-tag-danger'}`">{{ user.name }}</span>
         </div>
       </div>
     </div>
-    <div>
+    <div v-if="user.is_proctor">
       <h2>Users online</h2>
-      <div class="p-d-flex p-px-4 p-pb-3" style="gap: 0.75em">
+      <div class="p-d-flex p-px-4 p-pb-3" style="gap: 0.75em; flex-wrap: wrap">
         <div v-for="user in room.users_in_room.filter((user) => !user.is_proctor)" :key="user.id">
           <span :class="`p-tag ${room.users[user.id]?'':'p-tag-danger'}`">{{ user.name }}</span>
         </div>
@@ -238,7 +238,7 @@
               </template>
               <template #footer>
                 <div class="p-d-flex" style="gap: 1.5em">
-                  <Textarea style="flex-grow: 1" type="text" v-model="sendToUserDraft" placeholder="Talk to the hand"/>
+                  <Textarea style="flex-grow: 1" type="text" v-model="sendToUserDraft[user.id]" placeholder="Talk to the hand"/>
                   <Button icon="pi pi-upload" label="Send" @click="sendToUser(user)"/>
                 </div>
               </template>
@@ -278,7 +278,7 @@
 .users-streams {
   gap: 0.75rem;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .proctor-user-stream {
@@ -331,6 +331,10 @@ export default {
     user() {
       return this.$store.getters['user']
     },
+
+    current_user() {
+      return this.$store.getters['user']
+    },
     token() {
       return this.$store.getters['token']
     },
@@ -342,7 +346,7 @@ export default {
       roomId: 0,
       systemMessageDraft: '',
       userMessageDraft: '',
-      sendToUserDraft: '',
+      sendToUserDraft: [],
       loading: false,
       room: {
         proctors: {},
@@ -597,10 +601,10 @@ export default {
       this.room.users[user.id].unanswered = false;
       try {
         let res = await ajax.post(`/chat/messages/to-user/${user.id}`, {
-          message: this.sendToUserDraft
+          message: this.sendToUserDraft[user.id]
         })
         console.log(res);
-        this.sendToUserDraft = '';
+        this.sendToUserDraft[user.id] = '';
       } catch (e) {
         console.log('failed to send message to user', e)
       }
