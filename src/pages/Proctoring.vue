@@ -180,7 +180,11 @@
         <InputNumber id="columns" buttonLayout="horizontal" showButtons
                      v-model="columns"/>
         <label for="columns">Columns</label>
-      </span>
+        </span>
+      </div>
+      <div style="position: fixed; bottom: 0; left: 0">
+        <Button label="Disable all streams"/>
+        <Button label="Enable all streams"/>
       </div>
       <div class="users-streams" :style="`grid-template-columns: repeat(${columns}, 1fr);`">
         <Card v-for="user in room.users" :key="user.id">
@@ -583,7 +587,7 @@ export default {
 
     async refresh() {
       try {
-        let res = await ajax.get(`users/room/${this.user.is_admin ? this.roomId : this.user.room}`);
+        let res = await ajax.get(`users/room/${this.user.is_admin || this.user.is_proctor ? this.roomId : this.user.room}`);
         this.room.users_in_room = res.data.data;
       } catch (e) {
         this.$toast.add({severity: 'error', summary: 'Не удалось загрузить пользователей', life: 3000});
