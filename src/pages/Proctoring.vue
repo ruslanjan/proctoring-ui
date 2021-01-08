@@ -4,7 +4,7 @@
       <Button class="p-button-lg" v-if="loggedIn" :disabled="connect_disabled" @click="init">Connect</Button>
       <div v-if="user.is_admin || user.is_proctor">
           <span class="p-float-label">
-            <InputText id="room" v-model="roomId" autofocus/>
+            <InputText id="room" v-model.number="roomId" autofocus/>
             <label for="room">Room</label>
           </span>
       </div>
