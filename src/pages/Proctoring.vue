@@ -25,7 +25,7 @@
   <div v-if="!!user && joined" class="p-m-4">
     <Button @click="playNotification" label="Check notification sound"/>
     <div>
-      <h2>Room #{{user.is_admin || user.is_proctor ? roomId : user.room}}</h2>
+      <h2>Room #{{ user.is_admin || user.is_proctor ? roomId : user.room }}</h2>
       <h2>Proctors:</h2>
       <div class="p-d-flex p-px-4 p-pb-3" style="gap: 0.75em; flex-wrap: wrap">
         <div v-for="user in room.users_in_room.filter((user) => user.is_proctor)" :key="user.id">
@@ -101,7 +101,9 @@
         </template>
         <template #footer>
           <div class="p-d-flex" style="gap: 1.5em">
-            <Textarea style="flex-grow: 1" type="text" v-model="systemMessageDraft" placeholder="Talk to the hand"/>
+            <Textarea style="flex-grow: 1" type="text"
+                      @keydown.enter.shift.exact="sendToUser(user)"
+                      v-model="systemMessageDraft" placeholder="Talk to the hand"/>
             <Button icon="pi pi-upload" label="Send" @click="sendSystemMessage"/>
           </div>
         </template>
@@ -159,7 +161,9 @@
         </template>
         <template #footer>
           <div class="p-d-flex" style="gap: 1.5em">
-            <Textarea style="flex-grow: 1" type="text" v-model="userMessageDraft" placeholder="Talk to the hand"/>
+            <Textarea style="flex-grow: 1" type="text"
+                      @keydown.enter.shift.exact="sendToUser(user)"
+                      v-model="userMessageDraft" placeholder="Talk to the hand"/>
             <Button icon="pi pi-upload" label="Send" @click="sendUserMessage"/>
           </div>
         </template>
@@ -262,6 +266,7 @@
               <template #footer>
                 <div class="p-d-flex" style="gap: 1.5em">
                   <Textarea style="flex-grow: 1" type="text" v-model="sendToUserDraft[user.id]"
+                            @keydown.enter.shift.exact="sendToUser(user)"
                             placeholder="Talk to the hand"/>
                   <Button icon="pi pi-upload" label="Send" @click="sendToUser(user)"/>
                 </div>
