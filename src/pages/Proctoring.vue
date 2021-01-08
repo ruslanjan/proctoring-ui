@@ -776,7 +776,7 @@ export default {
 
       await this.init_chat();
 
-      this.channel = this.socket.channel(`proctor:${this.user.is_admin ? this.roomId : this.user.room}`, {})
+      this.channel = this.socket.channel(`proctor:${this.user.is_admin || this.user.is_proctor ? this.roomId : this.user.room}`, {})
 
 
       this.channel.join()
