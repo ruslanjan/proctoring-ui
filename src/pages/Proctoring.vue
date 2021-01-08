@@ -1,12 +1,14 @@
 <template>
   <div v-if="!joined && !!user" class="p-justify-center p-align-center p-d-flex" style="flex-grow: 1; gap: 0.75em">
-    <Button class="p-button-lg" v-if="loggedIn" :disabled="connect_disabled" @click="init">Connect</Button>
-    <div v-if="user.is_admin || user.is_proctor">
-        <span class="p-float-label">
-          <InputText id="room" v-model="roomId"/>
-          <label for="room">Room</label>
-        </span>
-    </div>
+    <form @submit.prevent="init" class="p-d-flex" style="gap: 0.75em" v-if="loggedIn">
+      <Button class="p-button-lg" v-if="loggedIn" :disabled="connect_disabled" @click="init">Connect</Button>
+      <div v-if="user.is_admin || user.is_proctor">
+          <span class="p-float-label">
+            <InputText id="room" v-model="roomId" autofocus/>
+            <label for="room">Room</label>
+          </span>
+      </div>
+    </form>
   </div>
   <Message v-if="allowWebcam" severity="error">
     <h3 style="margin: 0">Allow Webcam and microphone access</h3>
@@ -725,6 +727,9 @@ export default {
     },
 
     async init() {
+      if (this.connect_disabled) {
+        return;
+      }
       this.connect_disabled = true;
       if (!this.loggedIn) {
         await this.$router.push("/login");
