@@ -84,11 +84,11 @@ ajax.interceptors.response.use(
     if (status === UNAUTHORIZED) {
       store.dispatch('logout');
       router.push("/login");
-    }
-    try {
-      app.toast.add({severity: 'error', summary: 'Session life expired', life: 3000});
-    } catch (e) {
-      console.log(e);
+      try {
+        app.$toast.add({severity: 'error', summary: 'Session life expired', life: 3000});
+      } catch (e) {
+        console.log(e);
+      }
     }
     return Promise.reject(error);
   }

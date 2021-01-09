@@ -23,6 +23,7 @@ import Message from 'primevue/message';
 import Textarea from 'primevue/textarea';
 import InlineMessage from 'primevue/inlinemessage';
 import InputNumber from 'primevue/inputnumber';
+import FileUpload from 'primevue/fileupload';
 
 
 const app = createApp(App);
@@ -48,6 +49,7 @@ const primeComponents = {
   Textarea,
   InlineMessage,
   InputNumber,
+  FileUpload
 }
 Object.keys(primeComponents).forEach(key => {
   app.component(key, primeComponents[key]);

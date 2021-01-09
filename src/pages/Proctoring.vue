@@ -85,8 +85,11 @@
                         <div>
                           <strong>{{ message.from }}</strong>
                         </div>
+                        <div v-if="message.has_image">
+                          <img style="max-width: 100%" :src="`${api_url}/chat/messages/get-image/${message.id}.${message.image_extension}`">
+                        </div>
                         <div style="white-space: normal; word-break: break-all">
-                          {{ message.message }}
+                          <pre>{{ message.message }}</pre>
                         </div>
                       </div>
                       <div style="padding-left: 1em; white-space: nowrap">
@@ -104,7 +107,8 @@
             <Textarea style="flex-grow: 1" type="text"
                       @keydown.enter.shift.exact="sendToUser(user)"
                       v-model="systemMessageDraft" placeholder="Talk to the hand"/>
-            <Button icon="pi pi-upload" label="Send" @click="sendSystemMessage"/>
+            <FileUpload :customUpload="true" :disabled="loading" @uploader="sendSystemMessage" accept="image/*"/>
+            <Button icon="pi pi-upload" :disabled="loading" label="Send" @click="sendSystemMessage"/>
           </div>
         </template>
       </Card>
@@ -129,8 +133,11 @@
                           <div>
                             <strong>{{ message.from }}</strong>
                           </div>
+                          <div v-if="message.has_image">
+                            <img style="max-width: 100%" :src="`${api_url}/chat/messages/get-image/${message.id}.${message.image_extension}`">
+                          </div>
                           <div style="white-space: normal; word-break: break-all">
-                            {{ message.message }}
+                            <pre>{{ message.message }}</pre>
                           </div>
                         </div>
                         <div style="padding-left: 1em; white-space: nowrap">
@@ -145,8 +152,11 @@
                         <div>
                           <strong>{{ message.from }}</strong>
                         </div>
+                        <div v-if="message.has_image">
+                          <img style="max-width: 100%" :src="`${api_url}/chat/messages/get-image/${message.id}.${message.image_extension}`">
+                        </div>
                         <div style="white-space: normal; word-break: break-all">
-                          {{ message.message }}
+                          <pre>{{ message.message }}</pre>
                         </div>
                       </div>
                       <div style="padding-left: 1em; white-space: nowrap">
@@ -164,7 +174,8 @@
             <Textarea style="flex-grow: 1" type="text"
                       @keydown.enter.shift.exact="sendToUser(user)"
                       v-model="userMessageDraft" placeholder="Talk to the hand"/>
-            <Button icon="pi pi-upload" label="Send" @click="sendUserMessage"/>
+            <FileUpload :customUpload="true" :disabled="loading" @uploader="sendUserMessage" accept="image/*"/>
+            <Button icon="pi pi-upload" :disabled="loading" label="Send" @click="sendUserMessage"/>
           </div>
         </template>
       </Card>
@@ -233,8 +244,11 @@
                                 <div>
                                   <strong>{{ message.from }}</strong>
                                 </div>
+                                <div v-if="message.has_image">
+                                  <img style="max-width: 100%" :src="`${api_url}/chat/messages/get-image/${message.id}.${message.image_extension}`">
+                                </div>
                                 <div style="white-space: normal; word-break: break-all">
-                                  {{ message.message }}
+                                  <pre>{{ message.message }}</pre>
                                 </div>
                               </div>
                               <div style="padding-left: 1em; white-space: nowrap">
@@ -249,8 +263,11 @@
                               <div>
                                 <strong>{{ message.from }}</strong>
                               </div>
+                              <div v-if="message.has_image">
+                                <img style="max-width: 100%" :src="`${api_url}/chat/messages/get-image/${message.id}.${message.image_extension}`">
+                              </div>
                               <div style="white-space: normal; word-break: break-all">
-                                {{ message.message }}
+                                <pre>{{ message.message }}</pre>
                               </div>
                             </div>
                             <div style="padding-left: 1em; white-space: nowrap">
@@ -266,9 +283,10 @@
               <template #footer>
                 <div class="p-d-flex" style="gap: 1.5em">
                   <Textarea style="flex-grow: 1" type="text" v-model="sendToUserDraft[user.id]"
-                            @keydown.enter.shift.exact="sendToUser(user)"
+                            @keydown.enter.shift.exact="sendToUser(user, $event)"
                             placeholder="Talk to the hand"/>
-                  <Button icon="pi pi-upload" label="Send" @click="sendToUser(user)"/>
+                  <FileUpload :customUpload="true" :disabled="loading" @uploader="sendToUser(user, $event)" accept="image/*"/>
+                  <Button icon="pi pi-upload" label="Send" :disabled="loading" @click="sendToUser(user, $event)"/>
                 </div>
               </template>
             </Card>
@@ -323,11 +341,17 @@
   }
 }
 
+pre {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  word-break: break-all;
+  white-space: normal;
+}
 </style>
 
 <script>
 import { Socket } from "phoenix"
-import ajax, { websocket_url } from "@/api/ajax";
+import ajax, { api_url, websocket_url } from "@/api/ajax";
 import moment from 'moment';
 
 const openMediaDevices = async (constraints) => {
@@ -389,6 +413,9 @@ const servers = {
 export default {
   name: "Proctoring",
   computed: {
+    api_url() {
+      return api_url
+    },
     loggedIn() {
       return this.$store.getters['loggedIn']
     },
@@ -637,11 +664,31 @@ export default {
       }
     },
 
-    async sendUserMessage() {
+    async getImageFromEvent(event) {
+      if (event.files) {
+        console.log(event)
+        const file = event.files[0];
+        const getBytes = file => new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsBinaryString(file);
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = error => reject(error);
+        });
+
+        return {
+          bytes: btoa(await getBytes(file)),
+          extension: file.name.split('.').pop(),
+        }
+      }
+      return null
+    },
+
+    async sendUserMessage(event) {
       this.loading = true;
       try {
         let res = await ajax.post('/chat/messages/proctors', {
-          message: this.userMessageDraft
+          message: this.userMessageDraft,
+          image: await this.getImageFromEvent(event)
         })
         console.log(res);
         this.userMessageDraft = '';
@@ -651,11 +698,12 @@ export default {
       this.loading = false;
     },
 
-    async sendSystemMessage() {
+    async sendSystemMessage(event) {
       this.loading = true;
       try {
         let res = await ajax.post('/chat/messages/system', {
-          message: this.systemMessageDraft
+          message: this.systemMessageDraft,
+          image: await this.getImageFromEvent(event),
         })
         console.log(res);
         this.systemMessageDraft = '';
@@ -665,12 +713,13 @@ export default {
       this.loading = false;
     },
 
-    async sendToUser(user) {
+    async sendToUser(user, event) {
       this.loading = true;
       this.room.users[user.id].unanswered = false;
       try {
         let res = await ajax.post(`/chat/messages/to-user/${user.id}`, {
-          message: this.sendToUserDraft[user.id]
+          message: this.sendToUserDraft[user.id],
+          image: await this.getImageFromEvent(event)
         })
         console.log(res);
         this.sendToUserDraft[user.id] = '';
