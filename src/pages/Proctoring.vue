@@ -788,6 +788,8 @@ export default {
         } catch (e) {
           console.log(e)
           this.allowWebcam = true;
+          this.userMessageDraft = "Warning: User doesn't have or blocked screen sharing request!!!"
+          this.sendUserMessage()
         }
         this.$refs["localVideo"].srcObject = this.localStream;
         try {
@@ -815,6 +817,8 @@ export default {
         } catch (e) {
           console.log(e)
           this.allowDisplay = true;
+          this.userMessageDraft = "Warning: User doesn't have or blocked screen sharing request!!!"
+          this.sendUserMessage()
         }
       } else {
         // this.localStream = await openMediaDevices({'video': true, 'audio': true});
@@ -883,6 +887,7 @@ export default {
           // }
           // await this.createProctorPeerConnection(payload.body.user);
           // await this.sendOffer(payload.body.user);
+          this.loadUserChat(payload.body.user.id);
         } else {
           this.channel.push("user_here", {
             body: {
@@ -891,7 +896,6 @@ export default {
           });
         }
         this.room.users[payload.body.user.id] = payload.body.user;
-        this.loadUserChat(payload.body.user.id);
       });
 
       this.channel.on("user_left", async payload => {
