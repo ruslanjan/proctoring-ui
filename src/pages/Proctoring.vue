@@ -437,7 +437,7 @@ export default {
       roomId: 0,
       systemMessageDraft: '',
       userMessageDraft: '',
-      sendToUserDraft: '',
+      sendToUserDraft: [],
       loading: false,
       room: {
         proctors: {},
