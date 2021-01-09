@@ -788,7 +788,7 @@ export default {
         } catch (e) {
           console.log(e)
           this.allowWebcam = true;
-          this.userMessageDraft = "Warning: User doesn't have or blocked screen sharing request!!!"
+          this.userMessageDraft = "Warning: User doesn't have or blocked webcam sharing request!!!"
           this.sendUserMessage()
         }
         this.$refs["localVideo"].srcObject = this.localStream;
