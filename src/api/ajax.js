@@ -5,7 +5,7 @@ import { app } from '@/main';
 
 export const ui_host = (process.env.NODE_ENV === 'development')
   ? 'localhost:8080'
-  : 'proctor.iitu.kz';
+  : 'proc.tau.moe';
 
 export const ui_url = (process.env.NODE_ENV === 'development')
   ? 'http://' + ui_host
@@ -13,7 +13,7 @@ export const ui_url = (process.env.NODE_ENV === 'development')
 
 export const api_host = (process.env.NODE_ENV === 'development')
   ? 'localhost:4000'
-  : 'proctor.iitu.kz';
+  : 'proc.tau.moe';
 
 export const api_url = (process.env.NODE_ENV === 'development')
   ? `http://${api_host}/api`
