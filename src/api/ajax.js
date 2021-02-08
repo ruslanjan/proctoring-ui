@@ -3,23 +3,25 @@ import store from '@/store';
 import router from '@/router';
 import { app } from '@/main';
 
-export const ui_host = (process.env.NODE_ENV === 'development')
+const IS_DEV = process.env.NODE_ENV === 'development'
+
+export const ui_host = (IS_DEV)
   ? 'localhost:8080'
   : 'proc.tau.moe';
 
-export const ui_url = (process.env.NODE_ENV === 'development')
+export const ui_url = (IS_DEV)
   ? 'http://' + ui_host
   : 'https://' + ui_host;
 
-export const api_host = (process.env.NODE_ENV === 'development')
+export const api_host = (IS_DEV)
   ? 'localhost:4000'
   : 'proc.tau.moe';
 
-export const api_url = (process.env.NODE_ENV === 'development')
+export const api_url = (IS_DEV)
   ? `http://${api_host}/api`
   : `https://${api_host}/api`
 
-export const websocket_url = (process.env.NODE_ENV === 'development')
+export const websocket_url = (IS_DEV)
   ? `ws://${api_host}/socket`
   : `wss://${api_host}/socket`
 

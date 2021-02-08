@@ -200,7 +200,7 @@
         <label for="columns">Columns</label>
         </span>
       </div>
-      <div style="position: fixed; bottom: 0; left: 0">
+      <div style="position: fixed; bottom: 0; left: 0" hidden>
         <Button label="Disable all streams"/>
         <Button label="Enable all streams"/>
       </div>
@@ -362,52 +362,25 @@ const openDisplayDevices = async (constraints) => {
 }
 
 const servers = {
-  "iceServers": [
+  iceServers: [
     {
-      url: 'turn:proctor.iitu.kz:3478',
-      credential: 'somepassword',
-      username: 'guest',
-    }, {
-      url: 'stun:proctor.iitu.kz:3478',
+      url: 'turn:turn.proctor.iitu.kz',
+      username: 'proctoring',
+      credential: 'proctoring',
     },
     {
-      urls: 'turn:proctor.iitu.kz:3478',
-      credential: 'somepassword',
-      username: 'guest',
-    }, {
-      urls: 'stun:proctor.iitu.kz:3478',
+      url: 'stun:turn.proctor.iitu.kz:3478',
     },
-
-
-      //TODO Remove
-    {
-      url: 'turn:numb.viagenie.ca',
-      credential: 'muazkh',
-      username: 'webrtc@live.com'
-    },
-    {
-      url: 'turn:192.158.29.39:3478?transport=udp',
-      credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-      username: '28224511:1379330808'
-    },
-    {
-      url: 'turn:192.158.29.39:3478?transport=tcp',
-      credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-      username: '28224511:1379330808'
-    },
-    {
-      url: 'turn:turn.bistri.com:80',
-      credential: 'homeo',
-      username: 'homeo'
-    },
-    {
-      url: 'turn:turn.anyfirewall.com:443?transport=tcp',
-      credential: 'webrtc',
-      username: 'webrtc'
-    }
-    // {'urls': 'stun:stun.l.google.com:19302'}
+    // {
+    //   urls: 'turn:turn.proctor.iitu.kz:3478',
+    //   credential: 'proctoring',
+    //   username: 'proctoring',
+    // },
+    // {
+    //   urls: 'stun:turn.proctor.iitu.kz:3478',
+    // },
   ],
-  iceTransportPolicy: 'all'
+  // iceTransportPolicy: 'all'
 };
 
 export default {
@@ -647,6 +620,9 @@ export default {
       if (this.peers[peer.id]) {
         let pc = this.peers[peer.id];
         console.log('Got ICE Candidate')
+        // if(body.iceCandidate.candidate.indexOf("relay")<0){ // if no relay address is found, assuming it means no TURN server
+        //   return;
+        // }
         try {
           await pc.addIceCandidate(body.iceCandidate);
         } catch (e) {
