@@ -19,8 +19,9 @@
       </template>
     </Menubar>
     <router-view></router-view>
-    <div class="p-d-flex" style="justify-content: center; padding: 20px; margin-bottom: 40px;">
+    <div class="p-d-flex" style="justify-content: center; padding: 20px; margin-bottom: 20px;">
       <div style="text-align: center">
+        ProcTV <strong>v0.6</strong><br/>
         Made by <strong>Ruslan Jankurazov 2021</strong><br/>
         ruslanjan888@gmail.com
         <br/>
