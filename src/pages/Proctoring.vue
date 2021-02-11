@@ -3,10 +3,10 @@
     <form @submit.prevent="init" class="p-d-flex" style="gap: 0.75em" v-if="loggedIn">
       <Button class="p-button-lg" v-if="loggedIn" :disabled="connect_disabled" @click="init">Connect</Button>
       <div v-if="user.is_admin || user.is_proctor">
-          <span class="p-float-label">
-            <InputText id="room" v-model.number="roomId" autofocus/>
-            <label for="room">Room</label>
-          </span>
+        <span class="p-float-label">
+          <InputText id="room" v-model.number="roomId" autofocus/>
+          <label for="room">Room</label>
+        </span>
       </div>
     </form>
   </div>
@@ -30,9 +30,11 @@
       <div class="p-d-flex p-px-4 p-pb-3" style="gap: 0.75em; flex-wrap: wrap">
         <div v-for="user in room.users_in_room.filter((user) => user.is_proctor)" :key="user.id">
           <span
-              :class="`p-tag ${room.proctors[user.id] || !current_user.is_proctor?'p-tag-danger-info':'p-tag-danger'}`">{{
+              :class="`p-tag ${room.proctors[user.id] || !current_user.is_proctor?'p-tag-danger-info':'p-tag-danger'}`">
+            {{
               user.name
-            }}</span>
+            }}
+          </span>
         </div>
       </div>
     </div>
@@ -86,7 +88,8 @@
                           <strong>{{ message.from }}</strong>
                         </div>
                         <div v-if="message.has_image">
-                          <img style="max-width: 100%" :src="`${api_url}/chat/messages/get-image/${message.id}.${message.image_extension}`">
+                          <img style="max-width: 100%"
+                               :src="`${api_url}/chat/messages/get-image/${message.id}.${message.image_extension}`">
                         </div>
                         <div style="white-space: normal; word-break: break-all">
                           <pre>{{ message.message }}</pre>
@@ -134,7 +137,8 @@
                             <strong>{{ message.from }}</strong>
                           </div>
                           <div v-if="message.has_image">
-                            <img style="max-width: 100%" :src="`${api_url}/chat/messages/get-image/${message.id}.${message.image_extension}`">
+                            <img style="max-width: 100%"
+                                 :src="`${api_url}/chat/messages/get-image/${message.id}.${message.image_extension}`">
                           </div>
                           <div style="white-space: normal; word-break: break-all">
                             <pre>{{ message.message }}</pre>
@@ -153,7 +157,8 @@
                           <strong>{{ message.from }}</strong>
                         </div>
                         <div v-if="message.has_image">
-                          <img style="max-width: 100%" :src="`${api_url}/chat/messages/get-image/${message.id}.${message.image_extension}`">
+                          <img style="max-width: 100%"
+                               :src="`${api_url}/chat/messages/get-image/${message.id}.${message.image_extension}`">
                         </div>
                         <div style="white-space: normal; word-break: break-all">
                           <pre>{{ message.message }}</pre>
@@ -195,9 +200,9 @@
       </div>
       <div style="position: fixed; bottom: 0; right: 0">
         <span class="p-float-label" style="margin: 16px">
-        <InputNumber id="columns" buttonLayout="horizontal" showButtons
-                     v-model="columns"/>
-        <label for="columns">Columns</label>
+          <InputNumber id="columns" buttonLayout="horizontal" showButtons
+                       v-model="columns"/>
+          <label for="columns">Columns</label>
         </span>
       </div>
       <div style="position: fixed; bottom: 0; left: 0" hidden>
@@ -245,7 +250,8 @@
                                   <strong>{{ message.from }}</strong>
                                 </div>
                                 <div v-if="message.has_image">
-                                  <img style="max-width: 100%" :src="`${api_url}/chat/messages/get-image/${message.id}.${message.image_extension}`">
+                                  <img style="max-width: 100%"
+                                       :src="`${api_url}/chat/messages/get-image/${message.id}.${message.image_extension}`">
                                 </div>
                                 <div style="white-space: normal; word-break: break-all">
                                   <pre>{{ message.message }}</pre>
@@ -264,7 +270,8 @@
                                 <strong>{{ message.from }}</strong>
                               </div>
                               <div v-if="message.has_image">
-                                <img style="max-width: 100%" :src="`${api_url}/chat/messages/get-image/${message.id}.${message.image_extension}`">
+                                <img style="max-width: 100%"
+                                     :src="`${api_url}/chat/messages/get-image/${message.id}.${message.image_extension}`">
                               </div>
                               <div style="white-space: normal; word-break: break-all">
                                 <pre>{{ message.message }}</pre>
@@ -285,7 +292,8 @@
                   <Textarea style="flex-grow: 1" type="text" v-model="sendToUserDraft[user.id]"
                             @keydown.enter.shift.exact="sendToUser(user, $event)"
                             placeholder="Talk to the hand"/>
-                  <FileUpload :customUpload="true" :disabled="loading" @uploader="sendToUser(user, $event)" accept="image/*"/>
+                  <FileUpload :customUpload="true" :disabled="loading" @uploader="sendToUser(user, $event)"
+                              accept="image/*"/>
                   <Button icon="pi pi-upload" label="Send" :disabled="loading" @click="sendToUser(user, $event)"/>
                 </div>
               </template>
@@ -549,15 +557,18 @@ export default {
 
     async createUserPeerConnection(receiver) {
       let peerConnection = this.createProctorPeerConnection(receiver);
-      this.localStream.getTracks().forEach(track => {
-        peerConnection.addTrack(track, this.localStream);
-      });
-      this.localAudioStream.getTracks().forEach(track => {
-        peerConnection.addTrack(track, this.localAudioStream);
-      });
-      this.localDisplayStream.getTracks().forEach(track => {
-        peerConnection.addTrack(track, this.localDisplayStream);
-      });
+      if (this.localStream)
+        this.localStream.getTracks().forEach(track => {
+          peerConnection.addTrack(track, this.localStream);
+        });
+      if (this.localAudioStream)
+        this.localAudioStream.getTracks().forEach(track => {
+          peerConnection.addTrack(track, this.localAudioStream);
+        });
+      if (this.localDisplayStream)
+        this.localDisplayStream.getTracks().forEach(track => {
+          peerConnection.addTrack(track, this.localDisplayStream);
+        });
       this.peers[receiver.id] = peerConnection;
       console.log("created UserPeerConnection");
     },
