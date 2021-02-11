@@ -983,8 +983,11 @@ export default {
       this.socket.disconnect();
     }
     if (this.stream) {
+      if (this.stream)
       this.stream.close();
+      if (this.localDisplayStream)
       this.localDisplayStream.close();
+      if (this.localStream)
       this.localStream.close();
     }
   }
