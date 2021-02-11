@@ -641,7 +641,7 @@ export default {
     },
 
     async getImageFromEvent(event) {
-      if (event.files) {
+      if (event && event.files) {
         console.log(event)
         const file = event.files[0];
         const getBytes = file => new Promise((resolve, reject) => {
@@ -805,6 +805,9 @@ export default {
       this.socket.connect()
       ajax.get('/check-auth')
       await this.refresh();
+
+      await this.init_chat();
+
       this.joined = true;
       if (!this.user.is_proctor) {
         try {
@@ -848,8 +851,6 @@ export default {
       } else {
         // this.localStream = await openMediaDevices({'video': true, 'audio': true});
       }
-
-      await this.init_chat();
 
       this.channel = this.socket.channel(`proctor:${this.user.is_admin || this.user.is_proctor ? this.roomId : this.user.room}`, {})
 
